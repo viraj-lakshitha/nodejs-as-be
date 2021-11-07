@@ -1,0 +1,22 @@
+{
+  "name": "rest-shop",
+  "version": "1.0.0",
+  "description": "First NodeJS REST API Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/viraj-lakshitha/nodejs-as-be.git"
+  },
+  "author": "Viraj Lakshitha Bandara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/viraj-lakshitha/nodejs-as-be/issues"
+  },
+  "homepage": "https://github.com/viraj-lakshitha/nodejs-as-be#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
