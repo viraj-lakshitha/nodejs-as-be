@@ -1,14 +1,15 @@
 {
-  "name": "rest-shop",
+  "name": "nodejs-as-be",
   "version": "1.0.0",
-  "description": "First NodeJS REST API Project",
-  "main": "index.js",
+  "description": "1. `npm init` to initialize the package.json file\r 2. Install Express `npm install --save express`",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/viraj-lakshitha/nodejs-as-be.git"
+    "url": "git+https://github.com/viraj-lakshitha/nodejs-as-be.git"
   },
   "author": "Viraj Lakshitha Bandara",
   "license": "ISC",
