@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 mongoose.connect(
 	"mongodb+srv://dbAdmin:" +
 		process.env.MONGODB_PASSWORD +
-		"@shopcluster.dvwp0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+		"@shopcluster.dvwp0.mongodb.net/shopdb?retryWrites=true&w=majority"
 );
 
 // Handling CORS - We don't need to handle CORS in Postman

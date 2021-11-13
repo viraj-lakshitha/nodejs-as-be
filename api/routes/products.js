@@ -6,9 +6,14 @@ const Product = require("../models/product");
 
 router.get("/", (req, res, next) => {
 	Product.find()
+		.select('name price _id') // select only required fields
 		.exec()
 		.then((doc) => {
-			res.status(200).json(doc);
+			const response = {
+				count: doc.length,
+				products: doc
+			}
+			res.status(200).json(response);
 		})
 		.catch((err) => {
 			res.status(500).json({
@@ -24,15 +29,18 @@ router.post("/", (req, res, next) => {
 		name: req.body.name,
 		price: req.body.price,
 	});
-
 	// Save to DB
 	newProduct
 		.save()
 		.then((doc) => {
 			console.log(doc);
 			res.status(201).json({
-				message: "Handling POST request to /products",
-				createdProduct: doc,
+				message: "Created Product Successfully",
+				createdProduct: {
+					_id: doc.id,
+					name: doc.name,
+					price: doc.price
+				},
 			});
 		})
 		.catch((err) => {
@@ -46,6 +54,7 @@ router.post("/", (req, res, next) => {
 router.get("/:productId", (req, res, next) => {
 	const id = req.params.productId;
 	Product.findById(id)
+		.select('name price _id') // select only required fields
 		.exec()
 		.then((doc) => {
 			console.log("From DB: ", doc);
