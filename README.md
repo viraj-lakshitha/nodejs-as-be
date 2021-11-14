@@ -2,8 +2,8 @@
 
 ### Install Required Dependecies
 
--   `npm init` to Initialize the package.json file
--   Install packages to the project `npm install --save express nodemon body-parser morgan mongoose dotenv`
+- `npm init` to Initialize the package.json file
+- Install packages to the project `npm install --save express nodemon body-parser morgan mongoose dotenv multer`
 
 ### To Run the Project
 
