@@ -1,7 +1,9 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const router = express.Router();
 const multer = require("multer");
-const checkAuth = require("../middleware.js/check-auth");
+const checkAuth = require("../middleware/check-auth");
+const ProductController = require("../controllers/products");
+
 const storageStrategy = multer.diskStorage({
   // storage configurations
   destination: function (req, file, cb) {
@@ -29,128 +31,25 @@ const upload = multer({
   fileFilter: fileFilter,
 }); // Accept upto 5mb
 
-const router = express.Router();
-const Product = require("../models/product");
-
 // Handle GET request to /products
-router.get("/", (req, res, next) => {
-  Product.find()
-    .select("name price _id image") // select only required fields
-    .exec()
-    .then((doc) => {
-      const response = {
-        count: doc.length,
-        products: doc,
-      };
-      res.status(200).json(response);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        errorMessage: err?.message,
-      });
-    });
-});
+router.get("/", ProductController.getAllProducts);
 
 // Handle POST request to /products
 // Use Form Data for Request
-router.post("/", upload.single("productImage"), checkAuth, (req, res, next) => {
-  console.log(req.file);
-  // Create New Model from Product Schema
-  const newProduct = new Product({
-    _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
-    price: req.body.price,
-    productImage: req.file?.path,
-  });
-  // Save to DB
-  newProduct
-    .save()
-    .then((doc) => {
-      console.log(doc);
-      res.status(201).json({
-        message: "Created Product Successfully",
-        createdProduct: {
-          _id: doc.id,
-          name: doc.name,
-          price: doc.price,
-          productImage: doc.productImage,
-        },
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        errorMessage: err?.message,
-      });
-    });
-});
+router.post(
+  "/",
+  upload.single("productImage"),
+  checkAuth,
+  ProductController.createNewProduct
+);
 
 // Handle GET request to /products/:productId
-router.get("/:productId", (req, res, next) => {
-  const id = req.params.productId;
-  Product.findById(id)
-    .select("name price _id image") // select only required fields
-    .exec()
-    .then((doc) => {
-      console.log("From DB: ", doc);
-      doc
-        ? res.status(200).json(doc)
-        : res.status(404).json({
-            message: "No Valid Entry for given Id",
-          });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        errorMessage: err?.message,
-      });
-    });
-});
+router.get("/:productId", ProductController.getProductById);
 
 // Handle PATCH request to /products/:productId
-router.patch("/:productId", checkAuth, (req, res, next) => {
-  const id = req.params.productId;
-  const updateOps = {};
-
-  /* Format for the RequestBody
-	 [
-    	{
-        	"propName": "name",
-        	"value": "Harry Potter in SIN"
-    	}
-	 ]
-	*/
-
-  for (const ops of req.body) {
-    updateOps[ops.propName] = ops.value;
-  }
-
-  Product.update({ _id: id }, { $set: updateOps })
-    .exec()
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        errorMessage: err?.message,
-      });
-    });
-});
+router.patch("/:productId", checkAuth, ProductController.updateProduct);
 
 // Handle DELETE request to /products/:productId
-router.delete("/:productId", checkAuth, (req, res, next) => {
-  const id = req.params.productId;
-  Product.remove({ _id: id })
-    .exec()
-    .then((doc) => {
-      console.log(err);
-      res.status(200).json(doc);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        errorMessage: err?.message,
-      });
-    });
-});
+router.delete("/:productId", checkAuth, ProductController.deleteProduct);
 
 module.exports = router;
