@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const productRoutes = require("./api/routes/products");
 const orderRoutes = require("./api/routes/orders");
+const userRoutes = require("./api/routes/users");
 
 const app = express();
 app.use(morgan("dev"));
@@ -42,8 +43,11 @@ app.use((req, res, next) => {
 // Filter Routes with /products, goes with productRoutes
 app.use("/products", productRoutes);
 
-// Filter Routes with /orders, goes with productRoutes
+// Filter Routes with /orders, goes with orderRoutes
 app.use("/orders", orderRoutes);
+
+// Filter Routes with /orders, goes with userRoutes
+app.use("/users", userRoutes);
 
 // Handling Errors -> 404 - Not Found
 app.use((req, res, next) => {
